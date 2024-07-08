@@ -1,4 +1,4 @@
-create database Gestion_Tickets;
+create database PseudoJira;
 
 USE PseudoJira;
 
@@ -8,18 +8,18 @@ create table Roles(
                       role_name varchar (50)
 );
 
-create table Usuarios(
-                         user_id int,
-                         constraint user_id_pk primary key (user_id),
-                         username varchar (50) not null,
-                         password_hash varchar (255) not null,
-                         email varchar (100),
-                         constraint unique_email unique (email),
-                         role_id int,
-                         constraint role_id_fk foreign key (role_id) references Roles (role_id),
-                         created_at datetime, -- changed to datetime
-                         updated_at datetime -- changed to datetime
+CREATE TABLE Usuarios (
+                          user_id INT PRIMARY KEY IDENTITY,
+                          username VARCHAR(50) NOT NULL,
+                          password_hash VARCHAR(255) NOT NULL,
+                          email VARCHAR(100),
+                          CONSTRAINT unique_email UNIQUE (email),
+                          role_id INT,
+                          CONSTRAINT role_id_fk FOREIGN KEY (role_id) REFERENCES Roles (role_id),
+                          created_at DATETIME,
+                          updated_at DATETIME
 );
+
 
 create table Estados_Tickets(
                                 statud_id int,
