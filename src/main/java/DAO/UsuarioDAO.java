@@ -3,17 +3,18 @@ package DAO;
 import Modelos.Usuario;
 import ConexionDB.*;
 
-import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UsuarioDAO {
     private Connection connection;
 
-    public UsuarioDAO() throws SQLException {
-        connection = ConexionDB.getConnection();
+    public UsuarioDAO(Connection connection) throws SQLException {
+        this.connection = connection;
     }
 
     // Hashear contraseña
@@ -59,7 +60,31 @@ public class UsuarioDAO {
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public List<Usuario> allUsers() throws SQLException {
+        List<Usuario> allUsers = new ArrayList<>();
+        String query = "Select * from Usuarios";
+
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                Usuario usuario = new Usuario(
+                        resultSet.getString("username"),
+                        resultSet.getString("password_hash"),
+                        resultSet.getString("email"),
+                        resultSet.getInt("role_id"),
+                        resultSet.getDate("created_at"),
+                        resultSet.getDate("updated_at")
+                );
+                allUsers.add(usuario);
+            }
+            return allUsers;
+        }catch (SQLException A){
+            System.err.println("Error al buscar la lista de usuarios: "+ A.getMessage());
+            throw new SQLException();
+        }
+    }
+
+    /*public static void main(String[] args) throws IOException, SQLException {
         // Prueba para verificar si funciona el método creado y si se hashean las contraseñas en la base de datos
         String userName, contra, email, passwordHash;
         int roleid;
@@ -73,7 +98,6 @@ public class UsuarioDAO {
         contra = rd.readLine();
         System.out.println("Correo electrónico:");
         email = rd.readLine();
-        System.out.println("Rol:");
         roleid = 3;
         Date fecha = new Date(System.currentTimeMillis());
         createdAt = fecha;
@@ -90,11 +114,31 @@ public class UsuarioDAO {
             try {
                 usuarioDAO.insertUser(newUser);
                 System.out.println("Usuario insertado correctamente con ID: " + newUser.getUserId());
+                System.out.println(usuarioDAO.allUsers());
             } catch (SQLException e) {
                 System.err.println("Error al insertar usuario: " + e.getMessage());
             }
         } catch (SQLException e) {
             System.err.println("Error al establecer la conexión a la base de datos: " + e.getMessage());
         }
-    }
+
+        //prueba de Impresion de datos
+        UsuarioDAO usuarioDAO;
+        usuarioDAO = new UsuarioDAO();
+        List<Usuario> usuarios = null;
+        try {
+            usuarios = usuarioDAO.allUsers();
+            for (Usuario usuario : usuarios) {
+                System.out.println(usuario.getUsername());
+                System.out.println(usuario.getEmail());
+                System.out.println(usuario.getPasswordHash());
+                System.out.println("##################################\n\n");
+            }
+        } catch (SQLException e) {
+            System.err.println("error:" + e.getMessage());
+            throw new SQLException();
+        }
+
+
+    }*/
 }
