@@ -1,8 +1,11 @@
 package DAO;
 
+import ConexionDB.ConexionDB;
 import Modelos.Usuario;
-import ConexionDB.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -12,6 +15,7 @@ import java.util.List;
 
 public class UsuarioDAO {
     private Connection connection;
+    private String query = null;
 
     public UsuarioDAO(Connection connection) throws SQLException {
         this.connection = connection;
@@ -42,7 +46,7 @@ public class UsuarioDAO {
     }
 
     public void insertUser(Usuario newUser) throws SQLException {
-        String query = "INSERT INTO Usuarios (username, password_hash, email, role_id, created_at, updated_at) " +
+        query = "INSERT INTO Usuarios (username, password_hash, email, role_id, created_at, updated_at) " +
                 "VALUES (?,?,?,?,?,?)";
 
         try (PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -78,11 +82,42 @@ public class UsuarioDAO {
                 allUsers.add(usuario);
             }
             return allUsers;
-        }catch (SQLException A){
-            System.err.println("Error al buscar la lista de usuarios: "+ A.getMessage());
+        } catch (SQLException A) {
+            System.err.println("Error al buscar la lista de usuarios: " + A.getMessage());
             throw new SQLException();
         }
     }
+
+    //Metodo para iniciar sesion y validar contrasenas en la base de datos
+    public List<Usuario> logIn(String username, String password) throws SQLException {
+        List<Usuario> login = new ArrayList<>();
+        query = "SELECT * FROM Usuarios WHERE username = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, username);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    String storedPassword = resultSet.getString("password_hash");
+                    //comparar los hash a ver si coinciden
+                    if (hashPassword(password).equals(storedPassword)) {
+                         Usuario usuario= new Usuario(
+                                resultSet.getString("username"),
+                                resultSet.getInt("role_id")
+                        );
+                         login.add(usuario);
+                    }
+                    return login;
+                }
+            } catch (SQLException e) {
+                System.err.println("Error al iniciar sesion: " + e.getMessage());
+                throw e;
+            }
+            return null;
+
+        }
+    }
+
 
     /*public static void main(String[] args) throws IOException, SQLException {
         // Prueba para verificar si funciona el método creado y si se hashean las contraseñas en la base de datos

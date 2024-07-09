@@ -19,6 +19,10 @@ public class Usuario {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+    public Usuario(String username, int roleId){
+        this.username=username;
+        this.roleId = roleId;
+    }
 
     public int getUserId() {
         return userId;

@@ -6,7 +6,7 @@
 </head>
 <body>
 <h2>Registro de Usuario</h2>
-<form action="usuarios" method="post">
+<form action="registro" method="post">
     <label for="username">Nombre de usuario:</label>
     <input type="text" id="username" name="username" required><br><br>
 
