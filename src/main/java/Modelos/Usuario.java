@@ -23,7 +23,6 @@ public class Usuario {
         this.username=username;
         this.roleId = roleId;
     }
-
     public int getUserId() {
         return userId;
     }
