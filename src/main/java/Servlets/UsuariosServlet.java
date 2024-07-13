@@ -17,7 +17,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet(urlPatterns = {"/ users", "/registro", "/logIn"})
+@WebServlet(urlPatterns = {"/users", "/registro", "/logIn"})
 public class UsuariosServlet extends HttpServlet {
     private UsuarioDAO usuarioDAO;
     private String servletPath = null;
@@ -106,7 +106,7 @@ public class UsuariosServlet extends HttpServlet {
             printWriter.print("</body>");
             printWriter.print("</html>");
             printWriter.close();
-        } catch (Exception e) {
+        } catch (SQLException e) {
 // Manejo de excepciones (registrar el error, mostrar mensaje al usuario, etc.)
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al crear el usuario.");
         }

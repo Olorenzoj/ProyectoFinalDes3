@@ -12,6 +12,7 @@ CREATE TABLE Usuarios (
                           user_id INT PRIMARY KEY IDENTITY,
                           username VARCHAR(50) NOT NULL,
                           password_hash VARCHAR(255) NOT NULL,
+                          CONSTRAINT unique_password UNIQUE (password_hash);
                           email VARCHAR(100),
                           CONSTRAINT unique_email UNIQUE (email),
                           role_id INT,

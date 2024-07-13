@@ -1,6 +1,6 @@
 package Modelos;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Ticket {
     private int ticketId;
@@ -11,13 +11,13 @@ public class Ticket {
     private Date createAtTicket;
     private Date updatedAtTicket;
 
-    public Ticket(int userId, String title, String description, int statusId) {
+    public Ticket(int userId, String title, String description, int statusId, Date createAtTicket, Date updatedAtTicket ) {
         this.userId = userId;
         this.title = title;
         this.description = description;
         this.statusId = statusId;
-        this.createAtTicket = new Date();
-        this.updatedAtTicket = new Date();
+        this.createAtTicket = createAtTicket;
+        this.updatedAtTicket = updatedAtTicket;
     }
 
     public int getTicketId() {
