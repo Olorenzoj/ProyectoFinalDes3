@@ -2,17 +2,25 @@ package Modelos;
 
 import java.util.Date;
 
-public class Asignacion {
-    private int assigmentId;
+public class Asignaciones {
+    private int assignmentId;
     private int ticketId;
     private int operatorId;
     private Date assignedAt;
 
-    public Asignacion(int assigmentId, int ticketId, int operatorId, Date assignedAt) {
-        this.assigmentId = assigmentId;
+    public Asignaciones(int assignmentId, int ticketId, int operatorId, Date assignedAt) {
+        this.assignmentId = assignmentId;
         this.ticketId = ticketId;
         this.operatorId = operatorId;
         this.assignedAt = assignedAt;
+    }
+
+    public int getAssignmentId() {
+        return assignmentId;
+    }
+
+    public void setAssignmentId(int assignmentId) {
+        this.assignmentId = assignmentId;
     }
 
     public int getTicketId() {
@@ -38,12 +46,14 @@ public class Asignacion {
     public void setAssignedAt(Date assignedAt) {
         this.assignedAt = assignedAt;
     }
-
-    public int getAssigmentId() {
-        return assigmentId;
+    @Override
+    public String toString() {
+        return "Asignaciones{" +
+                "assignmentId=" + assignmentId +
+                ", ticketId=" + ticketId +
+                ", operatorId=" + operatorId +
+                ", assignedAt=" + assignedAt +
+                '}';
     }
 
-    public void setAssigmentId(int assigmentId) {
-        this.assigmentId = assigmentId;
-    }
 }
