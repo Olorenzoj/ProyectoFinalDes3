@@ -2,31 +2,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Registro de Usuario</title>
+    <meta charset="UTF-8">
+    <title>Menú Principal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+        }
+        .menu {
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        .menu a {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            text-align: center;
+            background-color: #f4f4f4;
+            text-decoration: none;
+            color: #333;
+            border-radius: 5px;
+        }
+        .menu a:hover {
+            background-color: #e4e4e4;
+        }
+    </style>
 </head>
 <body>
-<h2>Registro de Usuario</h2>
-<form action="registro" method="post">
-    <label for="username">Nombre de usuario:</label>
-    <input type="text" id="username" name="username" required><br><br>
-
-    <label for="password">Contraseña:</label>
-    <input type="password" id="password" name="password" required><br><br>
-
-    <label for="email">Correo electrónico:</label>
-    <input type="email" id="email" name="email" required><br><br>
-
-    <label for="role">Rol:</label>
-    <select id="role" name="role">
-        <option value="1">Administrador</option>
-        <option value="2">Operador</option>
-        <option value="3">Cliente</option>
-    </select><br><br>
-
-    <input type="hidden" name="createdAt" value=<%= new java.util.Date() %> />
-    <input type="hidden" name="updatedAt" value=<%= new java.util.Date() %> />
-
-    <input type="submit" value="Registrar">
-</form>
+    <h1>Menú Principal</h1>
+    <div class="menu">
+        <a href="verAsignacion.jsp?menu=verAsignacion">Ver Asignación</a>
+        <a href="actualizarAsignaciones.jsp?menu=actualizarAsignaciones">Actualizar Asignación</a>
+        <a href="eliminarAsignaciones.jsp?menu=eliminarAsignaciones">Eliminar Asignación</a>
+        <a href="insertarAsignacion.jsp?menu=insertarAsignacion">Insertar Asignación</a>
+        <a href="listarAsignaciones.jsp?menu=listarAsignaciones">Listar Asignaciones</a>
+    </div>
 </body>
 </html>

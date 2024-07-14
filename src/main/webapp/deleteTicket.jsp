@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="DAO.TicketDAO" %>
 <%@ page import="Modelos.Ticket" %>
+<%@ page import="java.sql.SQLException" %>
 <%
     // Obtener el objeto TicketDAO desde el contexto de la aplicación
     TicketDAO ticketDAO = (TicketDAO) application.getAttribute("ticketDAO");
@@ -74,6 +75,3 @@
 <%
     }
 %>
-
-
-
