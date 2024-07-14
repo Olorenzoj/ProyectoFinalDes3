@@ -34,29 +34,32 @@ public class TicketDAO {
         }
     }
 // new methods added
-    public List<Ticket> getAllTickets() throws SQLException {
-        List <Ticket> getAllTickets = new ArrayList<>();
-        String query = "SELECT * FROM Tickets";
+public List<Ticket> getAllTickets() throws SQLException {
+    List<Ticket> tickets = new ArrayList<>();
+    String query = "SELECT * FROM Tickets";
 
-        try (PreparedStatement statement = connection.prepareStatement(query);
-        ResultSet resultSet = statement.executeQuery()){
-            while (resultSet.next()){
-                Ticket ticket = new Ticket(
-                        resultSet.getInt("ticket_id"),
-                        resultSet.getString("title"),
-                        resultSet.getString("description_ticket"),
-                        resultSet.getInt("status_id"),
-                        resultSet.getDate("created_at_ticket"),
-                        resultSet.getDate("updated_at_ticket")
-                );
-                getAllTickets.add(ticket);
-            }
-            return getAllTickets;
-        } catch (SQLException e){
-            System.out.println("Error al buscar la lista de ticket: " + e.getMessage());
-            throw new SQLException();
+    try (PreparedStatement statement = connection.prepareStatement(query);
+         ResultSet resultSet = statement.executeQuery()) {
+
+        while (resultSet.next()) {
+            Ticket ticket = new Ticket(
+                    resultSet.getInt("ticket_id"),
+                    resultSet.getString("title"),
+                    resultSet.getString("description_ticket"),
+                    resultSet.getInt("status_id"),
+                    resultSet.getDate("create_at_ticket"),
+                    resultSet.getDate("updated_at_ticket")
+            );
+            System.out.println("Ticket obtenido: " + ticket);
+            tickets.add(ticket);
         }
+    } catch (SQLException e) {
+        System.out.println("Error al buscar la lista de tickets: " + e.getMessage());
+        throw new SQLException();
     }
+    return tickets;
+}
+
 
     public Ticket getTicketById(int ticketId) throws SQLException {
         String query = "SELECT * FROM Tickets WHERE ticket_id = ?";

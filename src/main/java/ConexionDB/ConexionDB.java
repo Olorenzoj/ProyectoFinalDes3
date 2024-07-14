@@ -6,9 +6,7 @@ import java.sql.SQLException;
 
 public class ConexionDB {
 
-    private static Connection connection;
-
-    public static Connection getConnection() throws SQLException {
+    private static Connection connection;public static Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             connection = connectionStablish();
             //si no existe la conexion o esta cerrada, la creamos
@@ -25,6 +23,8 @@ public class ConexionDB {
             throw new SQLException("Error al cargar el driver: " + a.getMessage());
         }
     }
+
+
 
     public static void main(String[] args) {
         Connection connection = null;
