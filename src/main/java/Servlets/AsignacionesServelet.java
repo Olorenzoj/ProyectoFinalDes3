@@ -1,7 +1,8 @@
 package Servlets;
 
-import DAO.AsignacionDAO;
-import Modelos.Asignacion;
+import DAO.AsignacionesDAO;
+import Modelos.Asignaciones;
+import ConexionDB.ConexionDB;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -10,26 +11,20 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
 @WebServlet("/asignaciones")
-public class AsignacionServelet extends HttpServlet {
-    private AsignacionDAO asignacionDAO;
+public class AsignacionesServelet extends HttpServlet {
+    private AsignacionesDAO asignacionesDAO;
 
     @Override
     public void init() throws ServletException {
-        String jdbcURL = "jdbc:mysql://localhost:3306/your_database"; // Reemplaza 'your_database' con tu nombre de base de datos
-        String jdbcUsername = "root";
-        String jdbcPassword = "password";
-
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
-            asignacionDAO = new AsignacionDAO(connection);
-        } catch (ClassNotFoundException | SQLException e) {
+            Connection connection = ConexionDB.getConnection();
+            asignacionesDAO = new AsignacionesDAO(connection);
+        } catch (SQLException e) {
             throw new ServletException(e);
         }
     }
@@ -55,7 +50,7 @@ public class AsignacionServelet extends HttpServlet {
                     updateAsignacion(request, response);
                     break;
                 default:
-                    listAsignacion(request, response);
+                    listAsignaciones(request, response);
                     break;
             }
         } catch (SQLException ex) {
@@ -63,9 +58,9 @@ public class AsignacionServelet extends HttpServlet {
         }
     }
 
-    private void listAsignacion(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
-        List<Asignacion> listAsignacion = asignacionDAO.allAsignacion();
-        request.setAttribute("listAsignacion", listAsignacion);
+    private void listAsignaciones(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+        List<Asignaciones> listAsignaciones = asignacionesDAO.allAsignaciones();
+        request.setAttribute("listAsignaciones", listAsignaciones);
         request.getRequestDispatcher("asignacion-list.jsp").forward(request, response);
     }
 
@@ -75,7 +70,7 @@ public class AsignacionServelet extends HttpServlet {
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        Asignacion existingAsignacion = asignacionDAO.getAsignacion(id);
+        Asignaciones existingAsignacion = asignacionesDAO.getAsignacion(id);
         request.setAttribute("asignacion", existingAsignacion);
         request.getRequestDispatcher("asignacion-form.jsp").forward(request, response);
     }
@@ -85,29 +80,36 @@ public class AsignacionServelet extends HttpServlet {
         int operatorId = Integer.parseInt(request.getParameter("operatorId"));
         Date assignedAt = new Date();
 
-        Asignacion newAsignacion = new Asignacion(0, ticketId, operatorId, assignedAt);
-        asignacionDAO.insertAsignacion(newAsignacion);
+        Asignaciones newAsignacion = new Asignaciones(0, ticketId, operatorId, assignedAt);
+        asignacionesDAO.insertAsignaciones(newAsignacion);
         response.sendRedirect("asignaciones");
     }
 
     private void updateAsignacion(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
+        int id = Integer.parseInt(request.getParameter("assignmentId"));
         int ticketId = Integer.parseInt(request.getParameter("ticketId"));
         int operatorId = Integer.parseInt(request.getParameter("operatorId"));
         Date assignedAt = new Date();
 
-        Asignacion asignacion = new Asignacion(id, ticketId, operatorId, assignedAt);
-        asignacionDAO.updateAsignacion(asignacion);
+        Asignaciones asignacion = new Asignaciones(id, ticketId, operatorId, assignedAt);
+        asignacionesDAO.updateAsignacion(asignacion);
         response.sendRedirect("asignaciones");
     }
 
     private void deleteAsignacion(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
 
-        Asignacion asignacion = new Asignacion(id, 0, 0, null);
-        asignacionDAO.deleteAsignacion(asignacion);
+        Asignaciones asignacion = new Asignaciones(id, 0, 0, null);
+        asignacionesDAO.deleteAsignacion(asignacion);
         response.sendRedirect("asignaciones");
     }
+
+    @Override
+    public void destroy() {
+        try {
+            asignacionesDAO.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
-
-
