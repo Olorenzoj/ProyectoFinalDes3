@@ -8,6 +8,7 @@ public class Usuario {
     private String passwordHash;
     private String email;
     private int roleId;
+    private String roleName;
     private Date createdAt;
     private Date updatedAt;
 
@@ -22,6 +23,13 @@ public class Usuario {
     public Usuario(String username, int roleId){
         this.username=username;
         this.roleId = roleId;
+    }
+
+    public Usuario(int userId, String username, int roleId, String roleName) {
+        this.userId = userId;
+        this.username = username;
+        this.roleId = roleId;
+        this.roleName = roleName;
     }
     public int getUserId() {
         return userId;
@@ -62,6 +70,10 @@ public class Usuario {
     public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
+
+    public String getRoleName() {return roleName;}
+
+    public void setRoleName(String roleName) {this.roleName = roleName;}
 
     public Date getCreatedAt() {
         return createdAt;

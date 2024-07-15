@@ -1,7 +1,7 @@
 package Servlets;
 
-import ConexionDB.ConexionDB;
 import DAO.EstadoTicketDAO;
+import ConexionDB.ConexionDB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -12,78 +12,107 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-@WebServlet(urlPatterns = "/ticketStatus")
+@WebServlet(name = "EstadoTicketServlet", urlPatterns = {"/estadoticket"})
 public class EstadoTicketServlet extends HttpServlet {
+
     private EstadoTicketDAO estadoTicketDAO;
+    private Connection connection;
 
     @Override
     public void init() throws ServletException {
-        super.init();
-        Connection connection = null;
         try {
             connection = ConexionDB.getConnection();
             estadoTicketDAO = new EstadoTicketDAO(connection);
         } catch (SQLException e) {
-            throw new RuntimeException("Error de conexión a la base de datos", e);
+            throw new ServletException("Error al establecer la conexión con la base de datos", e);
         }
+    }
+
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         String action = request.getParameter("action");
-        if (action == null) {
+
+        if (action != null && !action.isEmpty()) {
+            switch (action) {
+                case "getStatus":
+                    handleGetStatus(request, response);
+                    break;
+                case "updateStatus":
+                    handleUpdateStatus(request, response);
+                    break;
+                default:
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Acción no válida");
+            }
+        } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parámetro 'action' requerido");
+        }
+    }
+
+    protected void handleGetStatus(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String ticketIdStr = request.getParameter("ticketId");
+        if (ticketIdStr != null && !ticketIdStr.isEmpty()) {
+            try {
+                int ticketId = Integer.parseInt(ticketIdStr);
+                String ticketStatus = estadoTicketDAO.getTicketStatus(ticketId);
+                request.setAttribute("ticketStatus", ticketStatus);
+            } catch (NumberFormatException e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de ticket no válido");
+                return;
+            } catch (SQLException e) {
+                throw new ServletException("Error al obtener el estado del ticket", e);
+            }
+        } else {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parámetro 'ticketId' requerido");
             return;
         }
 
-        switch (action) {
-            case "updateStatus":
-                handleUpdateStatus(request, response);
-                break;
-            case "getStatus":
-                handleGetStatus(request, response);
-                break;
-            default:
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Acción no válida");
-        }
+        request.getRequestDispatcher("/estadoticket.jsp").forward(request, response);
     }
 
-    private void handleUpdateStatus(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int ticketId = Integer.parseInt(request.getParameter("ticketId"));
-        int newStatusId = Integer.parseInt(request.getParameter("newStatusId"));
+    protected void handleUpdateStatus(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String ticketIdStr = request.getParameter("ticketId");
+        String newStatusIdStr = request.getParameter("newStatusId");
 
-        try {
-            boolean updated = estadoTicketDAO.updateTicketStatus(ticketId, newStatusId);
-            if (updated) {
-                response.setStatus(HttpServletResponse.SC_OK);
-                response.getWriter().write("Estado del ticket actualizado correctamente");
-            } else {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No se pudo actualizar el estado del ticket");
+        if (ticketIdStr != null && !ticketIdStr.isEmpty() && newStatusIdStr != null && !newStatusIdStr.isEmpty()) {
+            try {
+                int ticketId = Integer.parseInt(ticketIdStr);
+                int newStatusId = Integer.parseInt(newStatusIdStr);
+                estadoTicketDAO.updateTicketStatus(ticketId, newStatusId);
+                request.setAttribute("message", "Estado de ticket actualizado correctamente");
+                request.setAttribute("success", true);
+            } catch (NumberFormatException e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de ticket o estado no válido");
+                return;
+            } catch (SQLException e) {
+                throw new ServletException("Error al actualizar el estado del ticket", e);
             }
-        } catch (SQLException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al actualizar el estado del ticket: " + e.getMessage());
+        } else {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parámetros 'ticketId' y 'newStatusId' requeridos");
+            return;
         }
-    }
 
-    private void handleGetStatus(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int ticketId = Integer.parseInt(request.getParameter("ticketId"));
-
-        try {
-            String status = estadoTicketDAO.getTicketStatus(ticketId);
-            if (status != null) {
-                response.getWriter().write("Estado actual del ticket: " + status);
-            } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "No se encontró el estado del ticket");
-            }
-        } catch (SQLException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al obtener el estado del ticket: " + e.getMessage());
-        }
+        request.getRequestDispatcher("/estadoticket.jsp").forward(request, response);
     }
 
     @Override
     public void destroy() {
         try {
-            estadoTicketDAO.close(); // Método close() necesario si existe en EstadoTicketDAO para cerrar la conexión
+            estadoTicketDAO.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

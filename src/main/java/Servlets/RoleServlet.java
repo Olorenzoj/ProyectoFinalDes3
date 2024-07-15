@@ -1,29 +1,32 @@
 package Servlets;
 
 import ConexionDB.ConexionDB;
-import DAO.RoleDAO;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
+import DAO.RoleDAO;
+import Modelos.Role;
+import Modelos.Usuario;
 
-@WebServlet(urlPatterns = {"/roles"})
+@WebServlet("/roles")
 public class RoleServlet extends HttpServlet {
     private RoleDAO roleDAO;
+    private Connection connection;
 
     @Override
     public void init() throws ServletException {
-        super.init();
         try {
-            Connection connection = ConexionDB.getConnection();
+            connection = ConexionDB.getConnection();
             roleDAO = new RoleDAO(connection);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new ServletException(e);
         }
     }
 
@@ -31,12 +34,25 @@ public class RoleServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
-        if ("getRoleName".equals(action)) {
-            getRoleName(request, response);
-        } else if ("printUserRoles".equals(action)) {
-            printUserRoles(response);
-        } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Acción no válida");
+        try {
+            if (action == null) {
+                // Obtener todos los usuarios con sus roles y enviarlos al JSP
+                List<Usuario> usuariosConRoles = roleDAO.getAllUsersWithRoles();
+                List<Role> roles = roleDAO.getAllRoles(); // Obtener todos los roles disponibles
+                request.setAttribute("usuariosConRoles", usuariosConRoles);
+                request.setAttribute("roles", roles); // Agregar la lista de roles a la solicitud
+
+                request.getRequestDispatcher("roles.jsp").forward(request, response);
+                return;
+            }
+
+            switch (action) {
+                default:
+                    response.sendRedirect("roles.jsp");
+                    break;
+            }
+        } catch (SQLException e) {
+            throw new ServletException("Error al obtener los roles desde la base de datos", e);
         }
     }
 
@@ -44,26 +60,13 @@ public class RoleServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
-        if ("reassignUserRole".equals(action)) {
-            reassignUserRole(request, response);
-        } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Acción no válida");
-        }
-    }
-
-    private void getRoleName(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int roleId = Integer.parseInt(request.getParameter("roleId"));
-
-        try {
-            String roleName = roleDAO.getRoleName(roleId);
-            if (roleName != null) {
-                response.setContentType("text/plain");
-                response.getWriter().write("Nombre del rol: " + roleName);
-            } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Rol no encontrado para el ID especificado");
-            }
-        } catch (SQLException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al obtener el nombre del rol: " + e.getMessage());
+        switch (action) {
+            case "reassignUserRole":
+                reassignUserRole(request, response);
+                break;
+            default:
+                response.sendRedirect("roles.jsp");
+                break;
         }
     }
 
@@ -73,24 +76,53 @@ public class RoleServlet extends HttpServlet {
 
         try {
             boolean success = roleDAO.reassignUserRole(userId, newRoleId);
+
             if (success) {
-                response.setContentType("text/plain");
-                response.getWriter().write("Rol reasignado correctamente.");
+                request.setAttribute("success", true);
+                request.setAttribute("message", "Rol de usuario reasignado correctamente.");
             } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Usuario no encontrado o error al reasignar rol.");
+                request.setAttribute("success", false);
+                request.setAttribute("message", "Error al reasignar el rol de usuario.");
             }
+
+        } catch (SQLServerException e) {
+            // Capturar la excepción específica de base de datos (ej. SQLServerException)
+            String errorMessage = "Error al reasignar el rol de usuario: " + e.getMessage(); // Mensaje de error específico
+            request.setAttribute("success", false);
+            request.setAttribute("message", errorMessage);
+
         } catch (SQLException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al reasignar el rol: " + e.getMessage());
+            throw new ServletException("Error al reasignar el rol de usuario", e);
         }
+
+        try {
+            // Recargar los datos necesarios después de la reasignación
+            List<Usuario> usuariosConRoles = roleDAO.getAllUsersWithRoles();
+            List<Role> roles = roleDAO.getAllRoles();
+
+            request.setAttribute("usuariosConRoles", usuariosConRoles);
+            request.setAttribute("roles", roles); // Actualizar la lista de roles
+
+        } catch (SQLException e) {
+            throw new ServletException("Error al obtener los usuarios con roles desde la base de datos", e);
+        }
+
+        // Mantener los valores en el formulario
+        request.setAttribute("userId", userId);
+        request.setAttribute("newRoleId", newRoleId);
+
+        request.getRequestDispatcher("roles.jsp").forward(request, response);
     }
 
-    private void printUserRoles(HttpServletResponse response) throws IOException {
+
+    @Override
+    public void destroy() {
         try {
-            roleDAO.printUserRoles();
-            response.setContentType("text/plain");
-            response.getWriter().write("Roles de usuarios impresos en la consola del servidor.");
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+            }
         } catch (SQLException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al imprimir los roles de los usuarios: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

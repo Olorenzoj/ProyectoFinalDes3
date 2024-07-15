@@ -12,27 +12,46 @@ public class EstadoTicketDAO {
         this.connection = connection;
     }
 
-    public boolean updateTicketStatus(int ticketId, int newStatusId) throws SQLException {
-        String query = "UPDATE Tickets SET status_id = ? WHERE ticket_id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, newStatusId);
-            stmt.setInt(2, ticketId);
-            int rowsUpdated = stmt.executeUpdate();
-            return rowsUpdated > 0;
-        }
-    }
-
     public String getTicketStatus(int ticketId) throws SQLException {
         String status = null;
-        String query = "SELECT status_name FROM Estados_Tickets WHERE statud_id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT status_name FROM Estados_Tickets WHERE statud_id = ?";
+            stmt = connection.prepareStatement(sql);
             stmt.setInt(1, ticketId);
-            ResultSet rs = stmt.executeQuery();
+            rs = stmt.executeQuery();
+
             if (rs.next()) {
                 status = rs.getString("status_name");
             }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
         }
+
         return status;
+    }
+
+    public void updateTicketStatus(int ticketId, int newStatusId) throws SQLException {
+        PreparedStatement stmt = null;
+
+        try {
+            String sql = "UPDATE Tickets SET status_id = ? WHERE ticket_id = ?";
+            stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, newStatusId);
+            stmt.setInt(2, ticketId);
+            stmt.executeUpdate();
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
     }
 
     public void close() throws SQLException {
@@ -41,4 +60,3 @@ public class EstadoTicketDAO {
         }
     }
 }
-
