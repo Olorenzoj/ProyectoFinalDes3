@@ -4,10 +4,11 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Insertar Asignación</title>
+    <title>Registro de Asignación</title>
+    <link rel="stylesheet" type="text/css" href="CSS/AsigIn.css">
 </head>
 <body>
-    <h1>Insertar Asignación</h1>
+    <h1>Ingresa una Asignación</h1>
 
     <%@ page errorPage="error.jsp" %>
 
@@ -56,7 +57,7 @@
         <label for="assignedAt">Fecha y Hora de Asignación (AAAA-MM-DD HH:MM:SS):</label>
         <input type="text" id="assignedAt" name="assignedAt" required><br><br>
 
-        <input type="submit" value="Insertar Asignación">
+        <input type="submit" value="Ingresar Asignacion">
     </form>
 
     <br>
