@@ -61,6 +61,6 @@
     </form>
 
     <br>
-    <p><a href="menuAsignaciones.jsp">Volver al Menú Principal</a></p>
+    <p><a href="menuAsignaciones.jsp">Volver al Inicio</a></p>
 </body>
 </html>
