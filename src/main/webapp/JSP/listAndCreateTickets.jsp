@@ -9,8 +9,16 @@
     <link rel="stylesheet" type="text/css" href="../CSS/Tickets.css">
 </head>
 <body>
-    <h1>Tickets</h1>
+<div class="menu-container">
+    <h1 style="color: white">Tickets</h1>
+    <div class="button-menu">
+        <button onclick="showSection('createTicketSection')">Crear Nuevo Ticket</button>
+        <button onclick="showSection('viewTicketsSection')">Ver Tickets</button>
+        <button onclick="showSection('deleteTicketSection')">Eliminar Ticket</button>
+    </div>
+</div>
 
+<div id="createTicketSection" style="display: none;">
     <h2>Crear Nuevo Ticket</h2>
     <form action="createTicket" method="post">
         <fieldset>
@@ -26,18 +34,9 @@
             <button type="submit">Crear</button>
         </fieldset>
     </form>
+</div>
 
-    <%-- Mostrar mensaje de confirmación --%>
-    <%
-        String message = (String) request.getAttribute("message");
-        String messageType = (String) request.getAttribute("messageType");
-        if (message != null) {
-    %>
-        <div class="message <%= messageType %>"><%= message %></div>
-    <%
-        }
-    %>
-
+<div id="viewTicketsSection" style="display: none;">
     <h2>Buscar Tickets</h2>
     <form action="getTicket" method="get">
         <label for="ticketId">Buscar Ticket por ID:</label>
@@ -45,34 +44,39 @@
         <button type="submit">Buscar</button>
     </form>
 
-    <%-- Obtener la lista de tickets desde el atributo de la solicitud --%>
-    <%
-        List<Ticket> tickets = (List<Ticket>) request.getAttribute("tickets");
-
-        if (tickets != null && !tickets.isEmpty()) {
-    %>
     <h2>Tickets Creados</h2>
+    <form action="tickets" method="get">
+        <label for="ticket">Obtener los Tickets:</label>
+        <button type="submit" id="ticket">Buscar</button>
+    </form>
     <div>
-    <%
-            for (Ticket ticket : tickets) {
-    %>
+        <%
+            List<Ticket> tickets = (List<Ticket>) request.getAttribute("tickets");
+            if (tickets != null && !tickets.isEmpty()) {
+                for (Ticket ticket : tickets) {
+        %>
         <div class="ticket-details">
             <p>Titulo: <%= ticket.getTitle() %></p>
+            <p>ID: <%= ticket.getTicketId() %></p>
+            <p>Asignando a: <%= ticket.getUserId()%></p>
             <p>Descripcion: <%= ticket.getDescription() %></p>
             <p>Creado el: <%= ticket.getCreateAtTicket() %></p>
             <p>Actualizado el: <%= ticket.getUpdatedAtTicket() %></p>
         </div>
-    <%
+        <%
             }
         } else {
-    %>
+        %>
         <div class="no-tickets">
             <p>No hay tickets disponibles.</p>
         </div>
-    <%
-        }
-    %>
+        <%
+            }
+        %>
+    </div>
+</div>
 
+<div id="deleteTicketSection" style="display: none;">
     <h2>Eliminar Tickets</h2>
     <form action="deleteTicket" method="post">
         <fieldset>
@@ -82,22 +86,15 @@
             <button type="submit">Eliminar Ticket</button>
         </fieldset>
     </form>
+</div>
 
-    <%-- Mostrar mensaje de confirmación de eliminación --%>
-    <%
-        if (message != null && messageType.equals("success")) {
-    %>
-        <div class="message success"><%= message %></div>
-    <%
-        } else if (message != null && messageType.equals("error")) {
-    %>
-        <div class="message error"><%= message %></div>
-    <%
-        }
-    %>
-
-    <hr>
-    <br>
-    <a href="../index.jsp">Inicio</a>
+<script>
+    function showSection(sectionId) {
+        document.getElementById("createTicketSection").style.display = "none";
+        document.getElementById("viewTicketsSection").style.display = "none";
+        document.getElementById("deleteTicketSection").style.display = "none";
+        document.getElementById(sectionId).style.display = "block";
+    }
+</script>
 </body>
 </html>

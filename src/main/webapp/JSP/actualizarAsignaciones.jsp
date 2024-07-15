@@ -29,7 +29,7 @@
                         int assignmentId = Integer.parseInt(request.getParameter("assignmentId"));
                         asignacion = asignacionDAO.getAsignacion(assignmentId);
                         if (asignacion == null) {
-                            out.println("<p>No se encontró la asignación con ID: " + assignmentId + ".</p>");
+                            System.out.println("<p>No se encontró la asignación con ID: " + assignmentId + ".</p>");
                         }
                     }
 
@@ -42,22 +42,22 @@
                         boolean updated = asignacionDAO.updateAsignacion(asignacion);
 
                         if (updated) {
-                            out.println("<p>Asignación actualizada correctamente.</p>");
+                            System.out.println("<p>Asignación actualizada correctamente.</p>");
                         } else {
-                            out.println("<p>Error al actualizar la asignación.</p>");
+                            System.out.println("<p>Error al actualizar la asignación.</p>");
                         }
                     }
 
                     connection.close();
                 } catch (SQLException e) {
-                    out.println("<p>Error de SQL: " + e.getMessage() + "</p>");
+                    System.out.println("<p>Error de SQL: " + e.getMessage() + "</p>");
                 }
             %>
 
             <% if (asignacion == null) { %>
                 <form action="" method="post">
                     <label for="assignmentId">Selecciona el ID de la Asignación:</label>
-                    <select name="assignmentId" id="assignmentId">
+                    <select name="assignmentId" id="assignment">
                         <% for (Asignaciones asign : asignacionesList) { %>
                             <option value="<%= asign.getAssignmentId() %>"><%= asign.getAssignmentId() %></option>
                         <% } %>

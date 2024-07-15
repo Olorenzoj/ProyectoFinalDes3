@@ -50,7 +50,7 @@
         <input type="hidden" name="action" value="updateStatus">
         <input type="hidden" name="ticketId" value="<%= ticket.getTicketId() %>">
         <label for="newStatusId">Nuevo Estado:</label>
-        <input type="number" name="newStatusId" required>
+        <input type="number" name="newStatusId" id="newStatusId" required>
         <button type="submit">Actualizar Estado</button>
     </form>
     <a href="listAndCreateTickets.jsp">Volver a la Lista de Tickets</a>

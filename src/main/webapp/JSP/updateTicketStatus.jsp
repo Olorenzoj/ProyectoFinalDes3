@@ -16,6 +16,7 @@
     <%-- Java code to handle database connection and update --%>
     <%@ page trimDirectiveWhitespaces="true" %>
     <%@ page import="java.util.*, java.io.*, java.sql.*" %>
+    <%@ page import="Modelos.EstadoTickets" %>
     <%@ page errorPage="error.jsp" %>
 
     <%
@@ -32,31 +33,36 @@
 
                     connection = ConexionDB.getConnection();
                     EstadoTicketDAO estadoTicketDAO = new EstadoTicketDAO(connection);
-
+                    Boolean updated = null;
                     // Actualizar el estado del ticket
-                    boolean updated = estadoTicketDAO.updateTicketStatus(ticketId, newStatusId);
+                    try {
+                        estadoTicketDAO.updateTicketStatus(ticketId, newStatusId);
+                        updated = true;
+                    }catch (SQLException ignored){
+
+                    }
 
                     if (updated) {
-                        out.println("<p>Estado del ticket actualizado correctamente.</p>");
+                        System.out.println("<p>Estado del ticket actualizado correctamente.</p>");
                     } else {
-                        out.println("<p>Error al actualizar el estado del ticket.</p>");
+                        System.out.println("<p>Error al actualizar el estado del ticket.</p>");
                     }
 
                     estadoTicketDAO.close();
                 } else {
-                    out.println("<p>Debe proporcionar ambos ID de ticket y nuevo estado ID.</p>");
+                    System.out.println("<p>Debe proporcionar ambos ID de ticket y nuevo estado ID.</p>");
                 }
             }
         } catch (SQLException e) {
-            out.println("<p>Error en la conexión o consulta SQL: " + e.getMessage() + "</p>");
+            System.out.println("<p>Error en la conexión o consulta SQL: " + e.getMessage() + "</p>");
         } catch (NumberFormatException e) {
-            out.println("<p>Debe ingresar números válidos para el ID del ticket y el nuevo estado ID.</p>");
+            System.out.println("<p>Debe ingresar números válidos para el ID del ticket y el nuevo estado ID.</p>");
         } finally {
             if (connection != null) {
                 try {
                     connection.close();
                 } catch (SQLException e) {
-                    out.println("<p>Error al cerrar la conexión: " + e.getMessage() + "</p>");
+                    System.out.println("<p>Error al cerrar la conexión: " + e.getMessage() + "</p>");
                 }
             }
         }

@@ -11,6 +11,15 @@ public class Ticket {
     private Date createAtTicket;
     private Date updatedAtTicket;
 
+    public Ticket(int ticketId,int userId, String title, String description, int statusId, Date createAtTicket, Date updatedAtTicket ) {
+        this.ticketId = ticketId;
+        this.userId = userId;
+        this.title = title;
+        this.description = description;
+        this.statusId = statusId;
+        this.createAtTicket = createAtTicket;
+        this.updatedAtTicket = updatedAtTicket;
+    }
     public Ticket(int userId, String title, String description, int statusId, Date createAtTicket, Date updatedAtTicket ) {
         this.userId = userId;
         this.title = title;

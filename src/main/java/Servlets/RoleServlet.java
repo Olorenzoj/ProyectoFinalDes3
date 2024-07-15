@@ -46,11 +46,7 @@ public class RoleServlet extends HttpServlet {
                 return;
             }
 
-            switch (action) {
-                default:
-                    response.sendRedirect("/JSP/roles.jsp");
-                    break;
-            }
+            response.sendRedirect("/JSP/roles.jsp");
         } catch (SQLException e) {
             throw new ServletException("Error al obtener los roles desde la base de datos", e);
         }
@@ -60,13 +56,10 @@ public class RoleServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
-        switch (action) {
-            case "reassignUserRole":
-                reassignUserRole(request, response);
-                break;
-            default:
-                response.sendRedirect("/JSP/roles.jsp");
-                break;
+        if (action.equals("reassignUserRole")) {
+            reassignUserRole(request, response);
+        } else {
+            response.sendRedirect("/JSP/roles.jsp");
         }
     }
 

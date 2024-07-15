@@ -44,6 +44,7 @@ public class TicketDAO {
             while (resultSet.next()) {
                 Ticket ticket = new Ticket(
                         resultSet.getInt("ticket_id"),
+                        resultSet.getInt("user_id"),
                         resultSet.getString("title"),
                         resultSet.getString("description_ticket"),
                         resultSet.getInt("status_id"),
@@ -69,6 +70,7 @@ public class TicketDAO {
             try (ResultSet resultSet = statement.executeQuery()){
                 if (resultSet.next()){
                     return new Ticket(
+                            resultSet.getInt("ticket_id"),
                             resultSet.getInt("user_id"),
                             resultSet.getString("title"),
                             resultSet.getString("description_ticket"),

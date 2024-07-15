@@ -27,13 +27,13 @@
                     asignacion = asignacionDAO.getAsignacion(assignmentId);
 
                     if (asignacion == null) {
-                        out.println("<p>No se encontró la asignación con ID: " + assignmentId + ".</p>");
+                        System.out.println("<p>No se encontró la asignación con ID: " + assignmentId + ".</p>");
                     }
                 }
 
                 connection.close();
             } catch (SQLException e) {
-                out.println("<p>Error de SQL: " + e.getMessage() + "</p>");
+                System.out.println("<p>Error de SQL: " + e.getMessage() + "</p>");
             }
         %>
 

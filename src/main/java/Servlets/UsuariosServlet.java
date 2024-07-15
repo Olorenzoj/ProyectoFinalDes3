@@ -2,6 +2,7 @@ package Servlets;
 
 import ConexionDB.ConexionDB;
 import DAO.UsuarioDAO;
+import Modelos.Ticket;
 import Modelos.Usuario;
 import jakarta.servlet.Servlet;
 import jakarta.servlet.ServletException;
@@ -40,9 +41,10 @@ public class UsuariosServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         servletPath = request.getServletPath();
 
-        switch (servletPath.toLowerCase()) {
-            case "/users" -> getUsers(request, response);
-            default -> response.sendError(HttpServletResponse.SC_NOT_FOUND, "Ruta no encontrada");
+        if (servletPath.equals("/JSP/users")) {
+            getUsers(request, response);
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Ruta no encontrada");
         }
     }
 
@@ -59,73 +61,73 @@ public class UsuariosServlet extends HttpServlet {
     protected void getUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             List<Usuario> usuarios = usuarioDAO.allUsers();
-
-            // mensaje en consola para revisar que los datos fueron traidos correctamente
-            if (usuarios != null && !usuarios.isEmpty()) {
-                System.out.println("Fetched " + usuarios.size() + " users.");
-                for (Usuario usuario : usuarios) {
-                    System.out.println(usuario);
-                }
-            } else {
-                System.err.println("No users found.");
-            }
-
             request.setAttribute("usuarios", usuarios);
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            request.getRequestDispatcher("/JSP/RegistroDeUsuarios.jsp").forward(request, response);
         } catch (SQLException e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al obtener la lista de usuarios: " + e.getMessage());
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al obtener la lista de tickets: " + e.getMessage());
         }
     }
 
     protected void handleRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-// Validación de entrada (ejemplo simplificado)
-        if (!request.getParameterMap().containsKey("username") || !request.getParameterMap().containsKey("password") || !request.getParameterMap().containsKey("email")) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Faltan campos obligatorios.");
-            return;
-        }
+        // Recopilación de datos del formulario
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String email = request.getParameter("email");
-        Date fecha = new Date(System.currentTimeMillis());
+
+        // Validación de datos (puedes agregar más validaciones según tus requisitos)
+        if (username == null || username.isEmpty() || password == null || password.isEmpty() || email == null || email.isEmpty()) {
+            request.setAttribute("message", "Todos los campos son obligatorios.");
+            request.setAttribute("messageType", "error");
+            response.sendRedirect(request.getContextPath() + "/JSP/RegistroDeUsuarios.jsp");
+            return;
+        }
+
         try {
             int role = Integer.parseInt(request.getParameter("role"));
-            String hashedPassword = usuarioDAO.hashPassword(password);
+            String hashedPassword = usuarioDAO.hashPassword(password); // Hash de la contraseña
+            Date fecha = new Date(System.currentTimeMillis());
 
+            // Creación del objeto Usuario
             Usuario usuario = new Usuario(username, hashedPassword, email, role, fecha, fecha);
 
-// Insertar en la base de datos
+            // Registro del usuario en la base de datos
             usuarioDAO.insertUser(usuario);
-
-// Redireccionar en caso de éxito
-            response.setContentType("text/html");
-            PrintWriter printWriter = response.getWriter();
-            printWriter.print("<html>");
-            printWriter.print("<body>");
-            printWriter.print("<h1 style=color: green> Registro Realizado exitosamente</h1>");
-            printWriter.print("</body>");
-            printWriter.print("</html>");
-            printWriter.close();
+            request.setAttribute("message", "Registro exitoso.");
+            request.setAttribute("messageType", "success");
+            response.sendRedirect(request.getContextPath() + "/JSP/RegistroDeUsuarios.jsp");
+            return;
+        } catch (NumberFormatException e) {
+            // Captura de excepcion al convertir el role
+            request.setAttribute("message", "Error en el formato del campo de role.");
+            request.setAttribute("messageType", "error");
         } catch (SQLException e) {
-// Manejo de excepciones (registrar el error, mostrar mensaje al usuario, etc.)
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al crear el usuario.");
+            // Captura de errores de base de datos (ej. duplicación de usuario)
+            e.printStackTrace();
+            request.setAttribute("message", "Error al crear el usuario: " + e.getMessage());
+            request.setAttribute("messageType", "error");
         }
+
+        // En caso de error redirigir de vuelta al formulario
+        response.sendRedirect(request.getContextPath() + "/JSP/RegistroDeUsuarios.jsp");
     }
+
 
     protected void handleLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        servletPath = request.getServletPath();
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
 
-        try {
-            List<Usuario> userLogged = usuarioDAO.logIn(username, password);
-            request.setAttribute("useLogged", userLogged);
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+    String username = request.getParameter("username");
+    String password = request.getParameter("password");
 
-        } catch (SQLException e) {
-            response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE, "iNFO NO COMPATIBLE");
-            throw new RuntimeException(e);
-        }
+    try {
+        List<Usuario> userLogged = usuarioDAO.logIn(username, password);
+        request.setAttribute("useLogged", userLogged);
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
+
+    } catch (SQLException e) {
+        response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE, "iNFO NO COMPATIBLE");
+        throw new RuntimeException(e);
     }
+
+}
 
 }
