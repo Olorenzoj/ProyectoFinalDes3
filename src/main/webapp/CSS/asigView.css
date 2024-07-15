@@ -1,0 +1,59 @@
+/* asigView */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    background-image: url("../Images/background.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.asignacion-detalle {
+    margin-top: 20px;
+}
+
+.centered {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.centered a {
+    text-decoration: none;
+    font-weight: bold;
+    padding: 12px 24px; /* Aumentamos el padding para hacer el botón más grande */
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 12px 24px; /* Ajustamos el padding para el botón */
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.centered a.azul {
+    color: #fff;
+    background-color: #007bff; /* Azul */
+    border: 1px solid #007bff;
+}
+
+.centered a.azul:hover {
+    background-color: #0056b3; /* Azul más oscuro al pasar el mouse */
+}

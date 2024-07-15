@@ -1,48 +1,64 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" errorPage="error.jsp" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="Modelos.Asignaciones" %>
+<%@ page import="DAO.AsignacionesDAO" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Date" %>
 
-<%@ page import="java.sql.Connection, java.sql.SQLException, DAO.AsignacionesDAO, Modelos.Asignaciones, ConexionDB.ConexionDB"%>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Eliminar Asignación</title>
+    <title>Eliminar Asignaciones</title>
+    <link rel="stylesheet" type="text/css" href="../CSS/asigElim.css">
 </head>
 <body>
-    <h1>Eliminar Asignación</h1>
+    <div class="container">
+        <h1>Elimina una Asignación</h1>
 
-    <%@ page errorPage="error.jsp" %>
+        <form method="post">
+            <label for="assignmentId">Selecciona el Assignment ID a eliminar:</label>
+            <select name="assignmentId" id="assignmentId">
+                <%
+                    AsignacionesDAO asignacionDAO = new AsignacionesDAO(ConexionDB.ConexionDB.getConnection());
+                    List<Asignaciones> asignacionesList = asignacionDAO.allAsignaciones();
+                    for (Asignaciones asignacion : asignacionesList) {
+                %>
+                    <option value="<%= asignacion.getAssignmentId() %>"><%= asignacion.getAssignmentId() %></option>
+                <% } %>
+            </select>
+            <br>
+            <button type="submit">Eliminar</button>
+        </form>
 
-    <%
-        try {
-            Connection connection = ConexionDB.getConnection();
-            AsignacionesDAO asignacionDAO = new AsignacionesDAO(connection);
-
-            if (request.getMethod().equals("POST")) {
+        <%-- Procesamiento del formulario --%>
+        <% if ("POST".equalsIgnoreCase(request.getMethod())) {
+            try {
                 int assignmentId = Integer.parseInt(request.getParameter("assignmentId"));
-                Asignaciones asignacion = new Asignaciones();
-                asignacion.setAssignmentId(assignmentId);
+                Asignaciones asignacion = new Asignaciones(assignmentId, 0, 0, new Date());
                 boolean deleted = asignacionDAO.deleteAsignacion(asignacion);
-
-                if (deleted) {
-                    out.println("<p>Asignación eliminada correctamente.</p>");
-                } else {
-                    out.println("<p>Error al eliminar la asignación.</p>");
-                }
+        %>
+                <div class="message">
+                    <% if (deleted) { %>
+                        <p>Asignación con ID <%= assignmentId %> eliminada correctamente.</p>
+                    <% } else { %>
+                        <p>Ocurrió un error al intentar eliminar la asignación con ID <%= assignmentId %> .</p>
+                    <% } %>
+                </div>
+        <%
+            } catch (NumberFormatException e) {
+        %>
+                <div class="error-message">
+                    <p>Error: Debes seleccionar un Assignment ID válido.</p>
+                </div>
+        <%
+            } finally {
+                asignacionDAO.close();
             }
-
-            connection.close();
-        } catch (SQLException e) {
-            out.println("<p>Error de SQL: " + e.getMessage() + "</p>");
         }
-    %>
+        %>
 
-    <form action="" method="post">
-        <label for="assignmentId">ID de Asignación:</label>
-        <input type="text" id="assignmentId" name="assignmentId" required><br><br>
-        <input type="submit" value="Eliminar Asignación">
-    </form>
-
-    <br>
-    <p><a href="../index.jsp">Volver al Inicio</a></p>
+        <p><a class="button" href="menuAsignaciones.jsp">Volver al Inicio</a></p>
+    </div>
 </body>
 </html>

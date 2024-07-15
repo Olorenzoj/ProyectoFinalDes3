@@ -1,0 +1,56 @@
+/* asigList.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    background-image: url("../Images/background.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.highlight-block {
+    background-color: #fff; /* Fondo blanco para resaltar el bloque */
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin: 20px auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra suave para destacar */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #007bff; /* Color de fondo del encabezado de la tabla */
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2; /* Color de fondo de las filas pares de la tabla */
+}
+
+a.button {
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff; /* Color de fondo del botón */
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+a.button:hover {
+    background-color: #0056b3; /* Color de fondo del botón al pasar el cursor */
+}
