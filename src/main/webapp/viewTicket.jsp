@@ -40,8 +40,10 @@
     %>
     <p>El ticket no fue encontrado.</p>
     <a href="listAndCreateTickets.jsp">Volver a la Lista de Tickets</a>
+
     <%
         }
     %>
+    <a href="estadoticket.jsp">Gestion de Tickets</a>
 </body>
 </html>
