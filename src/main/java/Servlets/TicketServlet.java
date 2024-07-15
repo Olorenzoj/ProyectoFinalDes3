@@ -112,11 +112,15 @@ public class TicketServlet extends HttpServlet {
 
         try {
             ticketDAO.createTicket(newTicket);
-            response.sendRedirect(request.getContextPath() + "/tickets"); // Redirect to list tickets page after creation
+            request.setAttribute("message", "Ticket creado exitosamente."); // Establecer mensaje de éxito
+            request.setAttribute("messageType", "success");
         } catch (SQLException e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al crear el ticket: " + e.getMessage());
+            request.setAttribute("message", "Error al crear el ticket: " + e.getMessage()); // Establecer mensaje de error
+            request.setAttribute("messageType", "error");
         }
+
+        getAllTickets(request, response); // Redirigir a la página de lista de tickets
     }
 
     protected void updateTicket(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

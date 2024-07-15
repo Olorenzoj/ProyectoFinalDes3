@@ -16,7 +16,7 @@ public class ConexionDB {
     }
 
     private static Connection connectionStablish() throws SQLException {
-        String url = "jdbc:sqlserver://localhost:1433;databaseName=PseudoJira;TrustServerCertificate=true;user=sa;password=1234;";
+        String url = "jdbc:sqlserver://localhost:1433;databaseName=newPseudoJira;TrustServerCertificate=true;user=sa;password=1234;";
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             return DriverManager.getConnection(url);
