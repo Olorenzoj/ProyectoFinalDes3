@@ -15,7 +15,7 @@ import DAO.RoleDAO;
 import Modelos.Role;
 import Modelos.Usuario;
 
-@WebServlet("/roles")
+@WebServlet("/JSP/roles")
 public class RoleServlet extends HttpServlet {
     private RoleDAO roleDAO;
     private Connection connection;
@@ -42,13 +42,13 @@ public class RoleServlet extends HttpServlet {
                 request.setAttribute("usuariosConRoles", usuariosConRoles);
                 request.setAttribute("roles", roles); // Agregar la lista de roles a la solicitud
 
-                request.getRequestDispatcher("roles.jsp").forward(request, response);
+                request.getRequestDispatcher("/JSP/roles.jsp").forward(request, response);
                 return;
             }
 
             switch (action) {
                 default:
-                    response.sendRedirect("roles.jsp");
+                    response.sendRedirect("/JSP/roles.jsp");
                     break;
             }
         } catch (SQLException e) {
@@ -65,7 +65,7 @@ public class RoleServlet extends HttpServlet {
                 reassignUserRole(request, response);
                 break;
             default:
-                response.sendRedirect("roles.jsp");
+                response.sendRedirect("/JSP/roles.jsp");
                 break;
         }
     }
@@ -111,7 +111,7 @@ public class RoleServlet extends HttpServlet {
         request.setAttribute("userId", userId);
         request.setAttribute("newRoleId", newRoleId);
 
-        request.getRequestDispatcher("roles.jsp").forward(request, response);
+        request.getRequestDispatcher("/JSP/roles.jsp").forward(request, response);
     }
 
 

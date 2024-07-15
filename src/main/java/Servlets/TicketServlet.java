@@ -15,7 +15,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet(urlPatterns = {"/tickets", "/createTicket", "/updateTicket", "/deleteTicket", "/getTicket"})
+@WebServlet(urlPatterns = {"/JSP/tickets", "/JSP/createTicket", "/JSP/updateTicket", "/JSP/deleteTicket", "/JSP/getTicket"})
 public class TicketServlet extends HttpServlet {
     private TicketDAO ticketDAO;
     private String servletPath = null;
@@ -38,10 +38,10 @@ public class TicketServlet extends HttpServlet {
         servletPath = request.getServletPath();
 
         switch (servletPath) {
-            case "/tickets":
+            case "/JSP/tickets":
                 getAllTickets(request, response);
                 break;
-            case "/getTicket":
+            case "/JSP/getTicket":
                 getTicketById(request, response);
                 break;
             default:
@@ -54,13 +54,13 @@ public class TicketServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         servletPath = request.getServletPath();
         switch (servletPath) {
-            case "/createTicket":
+            case "/JSP/createTicket":
                 createTicket(request, response);
                 break;
-            case "/updateTicket":
+            case "/JSP/updateTicket":
                 updateTicket(request, response);
                 break;
-            case "/deleteTicket":
+            case "/JSP/deleteTicket":
                 deleteTicket(request, response);
                 break;
             default:
@@ -73,7 +73,7 @@ public class TicketServlet extends HttpServlet {
         try {
             List<Ticket> tickets = ticketDAO.getAllTickets();
             request.setAttribute("tickets", tickets);
-            request.getRequestDispatcher("/listAndCreateTickets.jsp").forward(request, response);
+            request.getRequestDispatcher("/JSP/listAndCreateTickets.jsp").forward(request, response);
         } catch (SQLException e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al obtener la lista de tickets: " + e.getMessage());
@@ -92,7 +92,7 @@ public class TicketServlet extends HttpServlet {
         } catch (SQLException e) {
             request.setAttribute("errorMessage", "Error al obtener el ticket: " + e.getMessage());
         }
-        request.getRequestDispatcher("/viewTicket.jsp").forward(request, response);
+        request.getRequestDispatcher("/JSP/viewTicket.jsp").forward(request, response);
     }
 
     protected void createTicket(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

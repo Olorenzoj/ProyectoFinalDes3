@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-@WebServlet(name = "EstadoTicketServlet", urlPatterns = {"/estadoticket"})
+@WebServlet(name = "EstadoTicketServlet", urlPatterns = {"/JSP/estadoticket"})
 public class EstadoTicketServlet extends HttpServlet {
 
     private EstadoTicketDAO estadoTicketDAO;
@@ -80,7 +80,7 @@ public class EstadoTicketServlet extends HttpServlet {
             return;
         }
 
-        request.getRequestDispatcher("/estadoticket.jsp").forward(request, response);
+        request.getRequestDispatcher("/JSP/estadoticket.jsp").forward(request, response);
     }
 
     protected void handleUpdateStatus(HttpServletRequest request, HttpServletResponse response)
@@ -106,7 +106,7 @@ public class EstadoTicketServlet extends HttpServlet {
             return;
         }
 
-        request.getRequestDispatcher("/estadoticket.jsp").forward(request, response);
+        request.getRequestDispatcher("/JSP/estadoticket.jsp").forward(request, response);
     }
 
     @Override
