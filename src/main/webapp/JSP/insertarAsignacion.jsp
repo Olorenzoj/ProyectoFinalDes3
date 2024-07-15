@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Registro de Asignación</title>
-    <link rel="stylesheet" type="text/css" href="CSS/AsigIn.css">
+    <link rel="stylesheet" type="text/css" href="../CSS/AsigIn.css">
 </head>
 <body>
     <h1>Ingresa una Asignación</h1>
@@ -61,6 +61,6 @@
     </form>
 
     <br>
-    <p><a href="../index.jsp">Volver al Menú Principal</a></p>
+    <p><a href="menuAsignaciones.jsp">Volver al Menú Principal</a></p>
 </body>
 </html>

@@ -38,11 +38,11 @@
 <body>
 <h1>Menú Principal</h1>
 <div class="menu">
-    <a href="JSP/verAsignacion.jsp?menu=verAsignacion">Ver Asignación</a>
-    <a href="JSP/actualizarAsignaciones.jsp?menu=actualizarAsignaciones">Actualizar Asignación</a>
-    <a href="JSP/eliminarAsignaciones.jsp?menu=eliminarAsignaciones">Eliminar Asignación</a>
-    <a href="JSP/insertarAsignacion.jsp?menu=insertarAsignacion">Insertar Asignación</a>
-    <a href="JSP/listarAsignaciones.jsp?menu=listarAsignaciones">Listar Asignaciones</a>
+    <a href="verAsignacion.jsp?menu=verAsignacion">Ver Asignación</a>
+    <a href="actualizarAsignaciones.jsp?menu=actualizarAsignaciones">Actualizar Asignación</a>
+    <a href="eliminarAsignaciones.jsp?menu=eliminarAsignaciones">Eliminar Asignación</a>
+    <a href="insertarAsignacion.jsp?menu=insertarAsignacion">Insertar Asignación</a>
+    <a href="listarAsignaciones.jsp?menu=listarAsignaciones">Listar Asignaciones</a>
 </div>
 </body>
 </html>

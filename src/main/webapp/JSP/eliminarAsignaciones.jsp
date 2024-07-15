@@ -10,7 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Eliminar Asignaciones</title>
-    <link rel="stylesheet" type="text/css" href="CSS/asigElim.css">
+    <link rel="stylesheet" type="text/css" href="../CSS/asigElim.css">
 </head>
 <body>
     <div class="container">
@@ -58,7 +58,7 @@
         }
         %>
 
-        <p><a class="button" href="index.jsp">Volver al Inicio</a></p>
+        <p><a class="button" href="menuAsignaciones.jsp">Volver al Inicio</a></p>
     </div>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Listar Asignaciones</title>
-    <link rel="stylesheet" type="text/css" href="CSS/asigList.css">
+    <link rel="stylesheet" type="text/css" href="../CSS/asigList.css">
 </head>
 <body>
     <div class="highlight-block">
@@ -49,7 +49,7 @@
         <% } %>
 
         <br>
-        <p><a class="button" href="index.jsp">Volver al Inicio</a></p>
+        <p><a class="button" href="menuAsignaciones.jsp">Volver al Inicio</a></p>
     </div>
 </body>
 </html>

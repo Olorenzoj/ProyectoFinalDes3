@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Ver Asignación</title>
-    <link rel="stylesheet" type="text/css" href="CSS/asigView.css">
+    <link rel="stylesheet" type="text/css" href="../CSS/asigView.css">
 </head>
 <body>
     <div class="container">
@@ -58,7 +58,7 @@
                 <p>Fecha y Hora de Asignación: <%= new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(asignacion.getAssignedAt()) %></p>
 
                 <div class="centered">
-                    <p><a href="index.jsp" class="azul">Volver al Inicio</a></p>
+                    <p><a href="menuAsignaciones.jsp" class="azul">Volver al Inicio</a></p>
                 </div>
             </div>
         <% } %>

@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Actualizar Asignación</title>
-    <link rel="stylesheet" type="text/css" href="CSS/asigActu.css">
+    <link rel="stylesheet" type="text/css" href="../CSS/asigActu.css">
 </head>
 <body>
     <div class="container">
@@ -77,7 +77,7 @@
                     <input type="submit" name="updateAssignment" value="Actualizar Asignación">
                 </form>
                 <div class="centered">
-                    <p><a href="index.jsp">Volver al Inicio</a></p>
+                    <p><a href="menuAsignaciones.jsp">Volver al Inicio</a></p>
                 </div>
             <% } %>
         </div>
