@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -72,13 +71,8 @@ public class TicketServlet extends HttpServlet {
 
     protected void getAllTickets(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            System.out.println("Obteniendo todos los tickets...");
-            List<Ticket> tickets = ticketDAO.getAllTickets(); // Obteniendo la lista de tickets desde la base de datos
-            System.out.println("Tickets obtenidos: " + tickets);
-
-            request.setAttribute("tickets", tickets); // Estableciendo la lista de tickets como atributo de solicitud
-
-            // Redirigiendo al JSP para mostrar la lista de tickets
+            List<Ticket> tickets = ticketDAO.getAllTickets();
+            request.setAttribute("tickets", tickets);
             request.getRequestDispatcher("/listAndCreateTickets.jsp").forward(request, response);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -101,26 +95,25 @@ public class TicketServlet extends HttpServlet {
         request.getRequestDispatcher("/viewTicket.jsp").forward(request, response);
     }
 
-
     protected void createTicket(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String title = request.getParameter("title");
         String description = request.getParameter("description");
-        int userId = Integer.parseInt(request.getParameter("userId")); // Assuming userId is provided in the request
-        int statusId = 1; // Assuming a default status ID for new tickets
+        int userId = Integer.parseInt(request.getParameter("userId"));
+        int statusId = 1;
 
         Ticket newTicket = new Ticket(userId, title, description, statusId, new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()));
 
         try {
             ticketDAO.createTicket(newTicket);
-            request.setAttribute("message", "Ticket creado exitosamente."); // Establecer mensaje de éxito
+            request.setAttribute("message", "Ticket creado exitosamente.");
             request.setAttribute("messageType", "success");
         } catch (SQLException e) {
             e.printStackTrace();
-            request.setAttribute("message", "Error al crear el ticket: " + e.getMessage()); // Establecer mensaje de error
+            request.setAttribute("message", "Error al crear el ticket: " + e.getMessage());
             request.setAttribute("messageType", "error");
         }
 
-        getAllTickets(request, response); // Redirigir a la página de lista de tickets
+        getAllTickets(request, response);
     }
 
     protected void updateTicket(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -136,7 +129,7 @@ public class TicketServlet extends HttpServlet {
 
         try {
             ticketDAO.updateTicket(ticket);
-            response.sendRedirect(request.getContextPath() + "/tickets"); // Redirect to list tickets page after update
+            response.sendRedirect(request.getContextPath() + "/tickets");
         } catch (SQLException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al actualizar el ticket: " + e.getMessage());
         }
@@ -147,9 +140,13 @@ public class TicketServlet extends HttpServlet {
 
         try {
             ticketDAO.deleteTicket(ticketId);
-            response.sendRedirect(request.getContextPath() + "/tickets"); // Redirect to list tickets page after delete
+            request.setAttribute("message", "Ticket eliminado exitosamente.");
+            request.setAttribute("messageType", "success");
         } catch (SQLException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al eliminar el ticket: " + e.getMessage());
+            request.setAttribute("message", "Error al eliminar el ticket: " + e.getMessage());
+            request.setAttribute("messageType", "error");
         }
+
+        getAllTickets(request, response);
     }
 }

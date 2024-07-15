@@ -1,14 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="Modelos.Ticket" %>
-<%@ page import="Servlets.TicketServlet" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Tickets</title>
-        <link rel="stylesheet" type="text/css" href="CSS/Tickets.css">
-    <title>Tickets Seccion</title>
+    <link rel="stylesheet" type="text/css" href="CSS/Tickets.css">
 </head>
 <body>
     <h1>Tickets</h1>
@@ -41,7 +39,6 @@
     %>
 
     <h2>Buscar Tickets</h2>
-    <%-- Formulario para buscar ticket por ID --%>
     <form action="getTicket" method="get">
         <label for="ticketId">Buscar Ticket por ID:</label>
         <input type="text" id="ticketId" name="ticketId" required>
@@ -77,8 +74,7 @@
     %>
 
     <h2>Eliminar Tickets</h2>
-    <%-- Formulario para eliminar ticket por ID --%>
-    <form action="deleteTicket.jsp" method="post">
+    <form action="deleteTicket" method="post">
         <fieldset>
             <legend>Eliminar Ticket por ID:</legend>
             <label for="deleteTicketId">ID del Ticket:</label>
@@ -86,6 +82,19 @@
             <button type="submit">Eliminar Ticket</button>
         </fieldset>
     </form>
+
+    <%-- Mostrar mensaje de confirmación de eliminación --%>
+    <%
+        if (message != null && messageType.equals("success")) {
+    %>
+        <div class="message success"><%= message %></div>
+    <%
+        } else if (message != null && messageType.equals("error")) {
+    %>
+        <div class="message error"><%= message %></div>
+    <%
+        }
+    %>
 
     <hr>
     <br>
