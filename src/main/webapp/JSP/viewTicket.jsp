@@ -5,7 +5,7 @@
 <html>
 <head>
     <title>Tickets</title>
-    <link rel="stylesheet" type="text/css" href="CSS/viewTickets.css">
+    <link rel="stylesheet" type="text/css" href="../CSS/viewTickets.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -40,8 +40,10 @@
     %>
     <p>El ticket no fue encontrado.</p>
     <a href="listAndCreateTickets.jsp">Volver a la Lista de Tickets</a>
+
     <%
         }
     %>
+    <a href="estadoticket.jsp">Gestion de Tickets</a>
 </body>
 </html>

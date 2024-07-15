@@ -33,32 +33,32 @@ public class TicketDAO {
             }
         }
     }
-// new methods added
-public List<Ticket> getAllTickets() throws SQLException {
-    List<Ticket> tickets = new ArrayList<>();
-    String query = "SELECT * FROM Tickets";
+    // new methods added
+    public List<Ticket> getAllTickets() throws SQLException {
+        List<Ticket> tickets = new ArrayList<>();
+        String query = "SELECT * FROM Tickets";
 
-    try (PreparedStatement statement = connection.prepareStatement(query);
-         ResultSet resultSet = statement.executeQuery()) {
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
 
-        while (resultSet.next()) {
-            Ticket ticket = new Ticket(
-                    resultSet.getInt("ticket_id"),
-                    resultSet.getString("title"),
-                    resultSet.getString("description_ticket"),
-                    resultSet.getInt("status_id"),
-                    resultSet.getDate("create_at_ticket"),
-                    resultSet.getDate("updated_at_ticket")
-            );
-            System.out.println("Ticket obtenido: " + ticket);
-            tickets.add(ticket);
+            while (resultSet.next()) {
+                Ticket ticket = new Ticket(
+                        resultSet.getInt("ticket_id"),
+                        resultSet.getString("title"),
+                        resultSet.getString("description_ticket"),
+                        resultSet.getInt("status_id"),
+                        resultSet.getDate("create_at_ticket"),
+                        resultSet.getDate("updated_at_ticket")
+                );
+                System.out.println("Ticket obtenido: " + ticket);
+                tickets.add(ticket);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al buscar la lista de tickets: " + e.getMessage());
+            throw new SQLException();
         }
-    } catch (SQLException e) {
-        System.out.println("Error al buscar la lista de tickets: " + e.getMessage());
-        throw new SQLException();
+        return tickets;
     }
-    return tickets;
-}
 
 
     public Ticket getTicketById(int ticketId) throws SQLException {
