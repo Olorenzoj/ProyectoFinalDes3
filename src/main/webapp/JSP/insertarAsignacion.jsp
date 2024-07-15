@@ -60,6 +60,6 @@
     </form>
 
     <br>
-    <p><a href="index.jsp">Volver al Menú Principal</a></p>
+    <p><a href="../index.jsp">Volver al Menú Principal</a></p>
 </body>
 </html>

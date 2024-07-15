@@ -16,7 +16,7 @@
     <% if (menu != null && !menu.isEmpty()) { %>
         <p><a href="<%= menu %>.jsp">Volver al Menú</a></p>
     <% } else { %>
-        <p><a href="index.jsp">Volver al Menú Principal</a></p>
+        <p><a href="../index.jsp">Volver al Menú Principal</a></p>
     <% } %>
 </body>
 </html>

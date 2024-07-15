@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Gestión de Roles</title>
-    <link rel="stylesheet" type="text/css" href="CSS/roles.css">
+    <link rel="stylesheet" type="text/css" href="../CSS/roles.css">
 </head>
 <body>
     <h1>Gestión de Roles</h1>

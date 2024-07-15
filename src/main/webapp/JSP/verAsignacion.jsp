@@ -47,6 +47,6 @@
     <% } %>
 
     <br>
-    <p><a href="index.jsp">Volver al Inicio</a></p>
+    <p><a href="../index.jsp">Volver al Inicio</a></p>
 </body>
 </html>

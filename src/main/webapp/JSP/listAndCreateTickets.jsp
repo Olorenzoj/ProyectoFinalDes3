@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Tickets</title>
-    <link rel="stylesheet" type="text/css" href="CSS/Tickets.css">
+    <link rel="stylesheet" type="text/css" href="../CSS/Tickets.css">
 </head>
 <body>
     <h1>Tickets</h1>
@@ -98,6 +98,6 @@
 
     <hr>
     <br>
-    <a href="index.jsp">Inicio</a>
+    <a href="../index.jsp">Inicio</a>
 </body>
 </html>
