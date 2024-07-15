@@ -18,6 +18,8 @@
             <html>
             <head>
                 <title>Eliminar Ticket</title>
+                        <link rel="stylesheet" type="text/css" href="CSS/deleteTicket.css">
+                    <title>Eliminar Tickets</title>
             </head>
             <body>
                 <h1>Eliminar Ticket</h1>
@@ -31,6 +33,8 @@
             <!DOCTYPE html>
             <html>
             <head>
+            <title>EliminarTicket</title>
+                    <link rel="stylesheet" type="text/css" href="CSS/deleteTicket.css">
                 <title>Eliminar Ticket</title>
             </head>
             <body>
@@ -49,6 +53,8 @@
         <html>
         <head>
             <title>Error</title>
+                    <link rel="stylesheet" type="text/css" href="CSS/deleteTicket.css">
+                <title>Error</title>
         </head>
         <body>
             <h1>Error</h1>
@@ -64,6 +70,8 @@
         <!DOCTYPE html>
         <html>
         <head>
+        <title>Error</title>
+                <link rel="stylesheet" type="text/css" href="CSS/deleteTicket.css">
             <title>Error</title>
         </head>
         <body>

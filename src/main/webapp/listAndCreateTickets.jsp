@@ -6,11 +6,29 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Listado y Creación de Tickets</title>
+    <title>Tickets</title>
+        <link rel="stylesheet" type="text/css" href="CSS/Tickets.css">
+    <title>Tickets Seccion</title>
 </head>
 <body>
-    <h1>Listado de Tickets</h1>
+    <h1>Tickets</h1>
 
+    <h2>Crear Nuevo Ticket</h2>
+        <form action="createTicket" method="post">
+            <fieldset>
+                <legend>Datos del Ticket</legend>
+                <label for="userId">ID de Usuario:</label>
+                <input type="text" id="userId" name="userId" required><br><br>
+                <label for="title">Título:</label>
+                <input type="text" id="title" name="title" required><br><br>
+                <label for="description">Descripción:</label><br>
+                <textarea id="description" name="description" rows="4" cols="50" required></textarea><br><br>
+                <label for="statusId">ID de Estado:</label>
+                <input type="text" id="statusId" name="statusId" required><br><br>
+                <button type="submit">Crear</button>
+            </fieldset>
+        </form>
+<h2>Buscar Tickets</h2>
     <%-- Formulario para buscar ticket por ID --%>
     <form action="getTicket" method="get">
         <label for="ticketId">Buscar Ticket por ID:</label>
@@ -25,21 +43,12 @@
         if (tickets != null && !tickets.isEmpty()) {
             for (Ticket ticket : tickets) {
     %>
+    <h2>Tickets Creados</h2>
     <div>
-        <h2><%= ticket.getTitle() %></h2>
-        <p><%= ticket.getDescription() %></p>
+        <p>Titulo: <%= ticket.getTitle() %></p>
+        <p>Descripcion: <%= ticket.getDescription() %></p>
         <p>Creado el: <%= ticket.getCreateAtTicket() %></p>
         <p>Actualizado el: <%= ticket.getUpdatedAtTicket() %></p>
-
-        <%-- Formulario para eliminar ticket por ID --%>
-            <form action="deleteTicket.jsp" method="post">
-                <fieldset>
-                    <legend>Eliminar Ticket por ID:</legend>
-                    <label for="deleteTicketId">ID del Ticket:</label>
-                    <input type="text" id="deleteTicketId" name="ticketId" required>
-                    <button type="submit">Eliminar Ticket</button>
-                </fieldset>
-            </form>
 
     </div>
     <%
@@ -52,26 +61,18 @@
     <%
         }
     %>
-
+    <h2>Eliminar Tickets</h2>
+    <%-- Formulario para eliminar ticket por ID --%>
+                <form action="deleteTicket.jsp" method="post">
+                    <fieldset>
+                        <legend>Eliminar Ticket por ID:</legend>
+                        <label for="deleteTicketId">ID del Ticket:</label>
+                        <input type="text" id="deleteTicketId" name="ticketId" required>
+                        <button type="submit">Eliminar Ticket</button>
+                    </fieldset>
+                </form>
     <hr>
-    <h2>Crear Nuevo Ticket</h2>
-    <form action="createTicket" method="post">
-        <fieldset>
-            <legend>Datos del Ticket</legend>
-            <label for="userId">ID de Usuario:</label>
-            <input type="text" id="userId" name="userId" required><br><br>
-            <label for="title">Título:</label>
-            <input type="text" id="title" name="title" required><br><br>
-            <label for="description">Descripción:</label><br>
-            <textarea id="description" name="description" rows="4" cols="50" required></textarea><br><br>
-            <label for="statusId">ID de Estado:</label>
-            <input type="text" id="statusId" name="statusId" required><br><br>
-            <button type="submit">Crear</button>
-        </fieldset>
-    </form>
     <br>
-    <a href="tickets">Volver a la Lista de Tickets</a>
+    <a href="index.jsp">Inicio</a>
 </body>
 </html>
-
-

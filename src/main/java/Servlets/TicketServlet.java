@@ -92,14 +92,13 @@ public class TicketServlet extends HttpServlet {
             Ticket ticket = ticketDAO.getTicketById(ticketId);
             if (ticket != null) {
                 request.setAttribute("ticket", ticket);
-                request.getRequestDispatcher("/viewTicket.jsp").forward(request, response);
             } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Ticket no encontrado");
+                request.setAttribute("errorMessage", "Ticket no encontrado");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al obtener el ticket: " + e.getMessage());
+            request.setAttribute("errorMessage", "Error al obtener el ticket: " + e.getMessage());
         }
+        request.getRequestDispatcher("/viewTicket.jsp").forward(request, response);
     }
 
 
